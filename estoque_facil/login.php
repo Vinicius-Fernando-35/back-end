@@ -1,0 +1,29 @@
+<?php
+
+include "config/conexao.php";
+
+$email = $_POST["email"];
+$senha = $_POST["senha"];
+
+$sql = "SELECT * FROM tb_usuarios WHERE email = '$email'";
+
+$resultado = $conexao->query($sql);
+
+if ($resultado->rowcount() > 0){
+    $usuario = $resultado->fetch(PDO::FETCH_ASSOC);
+
+    if (password_verify($senha, $usuario["senha"])){
+        session_start();
+        $_SESSION["usuario"] = $usuario["nome_usuario"];
+        header("Location: index.php");
+        exit;
+    } else{
+        echo "Senha incorreta!";
+    }
+}
+else {
+    echo "Usuário não encontrado.";
+}
+echo "<br><a href='login.html'>Voltar</a>"
+
+?>
